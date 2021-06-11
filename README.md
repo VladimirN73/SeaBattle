@@ -1,2 +1,15 @@
 # SeaBattle
-Sea Battle  (Angular PWA, Serverless, Firestore) 
+
+Sea Battle  (Angular) 
+
+Frontend : Angular
+
+Style: Bootstrap
+
+Server : Serverless
+
+Database: Firestore
+
+Repo: github
+
+
