@@ -14,6 +14,7 @@ Hosting : AWS
 
 # History (newest on top)
 14.06.21
+ng update rxjs        --allowDirty=true --force
 ng update tslib       --allowDirty=true --force
 ng update @types/node --allowDirty=true --force
 
