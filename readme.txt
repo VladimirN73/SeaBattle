@@ -8,8 +8,14 @@ Hosting : AWS
 
 # Todo
 
+## Info
+1. supported typescript version by angular - see here (take/use the correct branch)
+   * https://github.com/angular/angular/blob/master/package.json
 
 # History (newest on top)
+14.06.21
+ng update tslib       --allowDirty=true --force
+ng update @types/node --allowDirty=true --force
 
 11.06.21
 
