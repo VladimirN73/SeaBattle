@@ -13,6 +13,11 @@ Hosting : AWS
    * https://github.com/angular/angular/blob/master/package.json
 
 # History (newest on top)
+15.06.21
+npm i rxjs@6.5.3 --allowDirty=true --force
+npm view rxjs versions     --- review versions
+ng add @angular/pwa        --- error incompatible with rxjs 7.1.0, expected is rxjs@^6.5.3
+
 14.06.21
 npm i --save-dev @types/lodash
 npm i lodash
