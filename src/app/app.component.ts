@@ -9,4 +9,5 @@ import { environment } from '../environments/environment'
 export class AppComponent {
   title = 'SeaBattle';
   version = environment.version;
+  envname = environment.name;
 }

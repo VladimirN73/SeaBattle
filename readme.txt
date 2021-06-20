@@ -13,7 +13,17 @@ Hosting : AWS
    * https://github.com/angular/angular/blob/master/package.json
 
 # History (newest on top)
+20.06.21
+ng build --configuration=production
+
 15.06.21
+
+do not forget that PWA works only for HTTPS
+
+install popup is not shown ...
+
+ok, build and deploy is working
+
 npm i rxjs@6.5.3 --allowDirty=true --force
 npm view rxjs versions     --- review versions
 ng add @angular/pwa        --- error incompatible with rxjs 7.1.0, expected is rxjs@^6.5.3
