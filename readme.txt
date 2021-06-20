@@ -14,6 +14,10 @@ Hosting : AWS
 
 # History (newest on top)
 20.06.21
+pwa still not working on AWS
+In AWS Amplify adapt the rewrite rule : add extension 'manifest' to the available rule
+pwa works on Azure but does not work on AWS Amplify
+
 ng build --configuration=production
 
 15.06.21
