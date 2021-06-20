@@ -14,6 +14,10 @@ Hosting : AWS
 
 # History (newest on top)
 20.06.21
+ng update @types/node                 --allowDirty=true --force
+ng update @angular/cli @angular/core  --allowDirty=true --force
+
+
 pwa still not working on AWS
 In AWS Amplify adapt the rewrite rule : add extension 'manifest' to the available rule
 pwa works on Azure but does not work on AWS Amplify
