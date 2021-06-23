@@ -2,9 +2,10 @@
   "name": "sea-battle",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "ng": "node ./temp/temp.js && ng",
+    "start": "node ./temp/temp.js && ng serve",
+    "build": "node ./temp/temp.js && ng build",
+    "temp":  "node ./temp/temp.js",
     "watch": "ng build --watch --configuration development"
   },
   "private": true,
