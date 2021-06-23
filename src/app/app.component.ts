@@ -10,4 +10,6 @@ export class AppComponent {
   title = 'SeaBattle';
   version = environment.version;
   envname = environment.name;
+  buildAt = environment.buildAt;
+  buildBranch = environment.buildBranch;
 }
