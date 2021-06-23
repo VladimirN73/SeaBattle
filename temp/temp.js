@@ -1,8 +1,14 @@
+const { temporaryAllocator } = require('@angular/compiler/src/render3/view/util');
+
+const strKeys=[];
+const strValues=[];
 
 function func()
 {
     setBuildAt();
     setBuildBranch();
+
+    replaceEnvironmentValues();
 }
 
 function setBuildAt()
@@ -21,8 +27,6 @@ function setBuildAt()
   currentdate = new Date(utc_timestamp) ;
 
   currentdate.setHours(currentdate.getHours() + 2); // move to german-time
-
-  console.log("utc_timestamp", utc_timestamp.toString());
   
   var strDateTime =  "" 
     + addLeadingZero(currentdate.getUTCDate()) + "."  
@@ -32,9 +36,9 @@ function setBuildAt()
     + addLeadingZero(currentdate.getUTCMinutes()) + ":" 
     + addLeadingZero(currentdate.getUTCSeconds());
 
-  console.log("strDateTime ", strDateTime);
 
-  replaceEnvironmentValue("buildAt", strDateTime);
+    strKeys.push("buildAt");
+    strValues.push(strDateTime);
 }
 
 function addLeadingZero(str)
@@ -47,46 +51,44 @@ function addLeadingZero(str)
     return ret;
 }
 
-function replaceEnvironmentValue(strKey, strValue)
+function replaceEnvironmentValues()
 {  
-
-    if (strValue == undefined)
-    {
-        strValue = "undefined";
-    }
-
-    console.log("strKey = ", strKey);
-    console.log("strValue = ", strValue);
-
     var fs = require('fs');
     var strFile ="./src/environments/environment.base.ts";
-
-    var regEx = new RegExp(`(${strKey})\s*(:).*(,)`)
-
     console.log("strFile = ", strFile);
-    console.log("regEx = ", regEx);
 
+    fs.readFile(strFile , 'utf8', function (err,data) {
 
-  fs.readFileSync(strFile , 'utf8', function (err,data) {
-    if (err) {
-      return console.log(err);
-    }
-    var result = data.replace(regEx, `${strKey}: "${strValue}",`);
+      if (err) {
+        return console.log(err);
+      }
 
-    fs.writeFileSync(strFile , result, 'utf8', function (err) {
-      if (err) return console.log(err);
+      console.log("source = ", data);
+
+      var result = data; 
+      let iCount = strKeys.length;
+
+      for (let i = 0; i < iCount; i++) {
+        var regEx = new RegExp(`(${strKeys[i]})\s*(:).*(,)`)
+        console.log(`${i}. strKey=${strKeys[i]}, strValue=${strValues[i]},    regEx = ${regEx}`);
+        result = result.replace(regEx, `${strKeys[i]}: "${strValues[i]}",`);
+      }
+
+      console.log("result = ", result);
+
+      fs.writeFile(strFile , result, 'utf8', function (err) {
+        if (err) return console.log(err);
+      });
     });
-  });
-
 }
-
 
 function setBuildBranch()
 {
     var strKey = "buildBranch";
     var strValue = process.env.BUILD_BRANCH;
 
-    replaceEnvironmentValue(strKey, strValue);
+    strKeys.push(strKey);
+    strValues.push(strValue);
 }
 
 func();
