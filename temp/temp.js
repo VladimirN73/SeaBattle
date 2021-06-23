@@ -58,10 +58,8 @@ function replaceEnvironmentValue(strKey, strValue)
     console.log("strKey = ", strKey);
     console.log("strValue = ", strValue);
 
-
     var fs = require('fs');
     var strFile ="./src/environments/environment.base.ts";
-    //var regEx = /(buildAt)\s*(:).*(,)/g; 
 
     var regEx = new RegExp(`(${strKey})\s*(:).*(,)`)
 
