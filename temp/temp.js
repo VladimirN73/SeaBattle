@@ -1,6 +1,12 @@
 
 function func()
 {
+    setBuildAt();
+    setBuildBranch();
+}
+
+function setBuildAt()
+{
   var currentdate = new Date();
     
   var utc_timestamp = Date.UTC(
@@ -28,21 +34,7 @@ function func()
 
   console.log("strDateTime ", strDateTime);
 
-  var fs = require('fs')
-  var strFile ="./src/environments/environment.base.ts";
-  var strKey= "buildAt";
-  var regEx = /(buildAt)\s*(:).*(,)/g; 
-
-  fs.readFile(strFile , 'utf8', function (err,data) {
-    if (err) {
-      return console.log(err);
-    }
-    var result = data.replace(regEx, `${strKey}: "${strDateTime}",`);
-
-    fs.writeFile(strFile , result, 'utf8', function (err) {
-      if (err) return console.log(err);
-    });
-  });
+  replaceEnvironmentValue("buildAt", strDateTime);
 }
 
 function addLeadingZero(str)
@@ -53,6 +45,50 @@ function addLeadingZero(str)
         ret = "0" + ret;
     }
     return ret;
+}
+
+function replaceEnvironmentValue(strKey, strValue)
+{  
+
+    if (strValue == undefined)
+    {
+        strValue = "undefined";
+    }
+
+    console.log("strKey = ", strKey);
+    console.log("strValue = ", strValue);
+
+
+    var fs = require('fs');
+    var strFile ="./src/environments/environment.base.ts";
+    //var regEx = /(buildAt)\s*(:).*(,)/g; 
+
+    var regEx = new RegExp(`(${strKey})\s*(:).*(,)`)
+
+    console.log("strFile = ", strFile);
+    console.log("regEx = ", regEx);
+
+
+  fs.readFileSync(strFile , 'utf8', function (err,data) {
+    if (err) {
+      return console.log(err);
+    }
+    var result = data.replace(regEx, `${strKey}: "${strValue}",`);
+
+    fs.writeFileSync(strFile , result, 'utf8', function (err) {
+      if (err) return console.log(err);
+    });
+  });
+
+}
+
+
+function setBuildBranch()
+{
+    var strKey = "buildBranch";
+    var strValue = process.env.BUILD_BRANCH;
+
+    replaceEnvironmentValue(strKey, strValue);
 }
 
 func();
