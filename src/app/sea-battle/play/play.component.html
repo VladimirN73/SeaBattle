@@ -1,0 +1,78 @@
+<div class="container lng-full-row" >
+  <div><h2>Sea Battle</h2></div>
+  <div><app-button-back></app-button-back></div>
+</div>
+
+<div class="container" >
+  <p *ngIf="game.gamename!=''">Game: {{game.gamename}}, myname: {{game.myname}}, enemy:{{game.enemyName}} </p>
+  <p *ngIf="game.gamename==''">Game: OFFLINE </p>
+</div>
+
+<div style="margin-left: auto; margin-right: auto; text-align: center;">
+  My Army
+</div>
+<div class="sea-map" style="margin-left: auto; margin-right: auto;">
+  <div class="sea-row" *ngFor="let row of mySeaMap; let i = index ">
+    <div
+      [ngClass]="getBoxText(i,j)"
+      style="color: red;"
+      *ngFor="let item of row; let j = index"
+      (click)="onClick(i,j)"
+    >
+      <div class="" style="margin-top: -25px;">
+        {{getText(i,j)}}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  {{message}}
+</div>
+
+<div class="sea-div lng-full-row">
+
+  <button type="button" class="btn btn-primary" (click)="onRandom()">Random</button>
+
+  <button type="button" class="btn btn-success" (click)="onStart()">Start</button>
+
+  <button type="button" class="btn btn-primary" (click)="onRefresh()" *ngIf="isOnline" >Refresh</button>
+
+  <button type="button" class="btn btn-danger" (click)="onReset()">Reset</button>
+</div>
+
+<div class="container">
+  {{playService.message}}
+</div>
+
+<div style="margin-left: auto; margin-right: auto; text-align: center;">
+  Enemy Army
+</div>
+<div class="sea-map" style="margin-left: auto; margin-right: auto;">
+  <div class="sea-row" *ngFor="let row of enemySeaMap; let i = index ">
+    <div
+      [ngClass]="getBoxTextEnemy(i,j)"
+      *ngFor="let item of row; let j = index "
+      (click)="onClickEnemy(i,j)"
+      style="color: red;"
+    >
+      <div class="" style="margin-top: -25px;">
+        {{getText(i,j)}}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  {{messageEnemy}}
+</div>
+
+<div class="container" style="color: blue;">
+  <h2>Game-Info</h2>
+  gamename:'{{game.gamename}}' <br/>
+  myname:'{{game.myname}}' <br/>
+  enemyname:'{{game.enemyName}}' <br/>
+  isOnline:'{{game.isOnline}}' <br/>
+  isConnected:'{{game.isConnected}}' <br/>
+  isWaiting:'{{game.isWaiting}}' <br/>
+</div>

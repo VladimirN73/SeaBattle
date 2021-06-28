@@ -1,7 +1,7 @@
 # Tech Info
 
 Repo    : Github https://github.com/VladimirN73/SeaBattle.git
-Style   : Booststrap
+Style   : SCSS, Booststrap
 Hosting : AWS
 
 # Issues
@@ -13,6 +13,9 @@ Hosting : AWS
    * https://github.com/angular/angular/blob/master/package.json
 
 # History (newest on top)
+28.06.21
+add folders seabattle and debug
+
 20.06.21
 ng update @types/node                 --allowDirty=true --force
 ng update @angular/cli @angular/core  --allowDirty=true --force

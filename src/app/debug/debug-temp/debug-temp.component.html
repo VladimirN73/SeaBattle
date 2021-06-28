@@ -1,0 +1,15 @@
+<div class="container">
+  <div class="debug-header">Debug Temp</div>
+  <app-debug-button-back></app-debug-button-back>
+</div>
+
+
+<div class="container">
+  <input type="text" placeholder="gamename" #nameInput >
+  <button class="btn btn-primary" (click)="onSave(nameInput.value)">Save</button>
+  <button class="btn btn-primary" (click)="onLoad(nameInput.value)">Load</button>
+</div>
+
+<div class="container">
+  {{message}}
+</div>
