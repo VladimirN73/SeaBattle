@@ -7,10 +7,12 @@ import { APP_ROUTES, EXTRA_OPTIONS } from './app.routes';
 import { AppComponent } from './app.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { StartComponent } from './start/start.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    StartComponent
   ],
   imports: [
     BrowserModule,
