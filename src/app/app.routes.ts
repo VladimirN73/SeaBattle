@@ -2,14 +2,20 @@ import { ExtraOptions, PreloadAllModules, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
 import { StartComponent } from './start/start.component';
 
+export enum AppRoutes {
+  root = '/',
+  seaBattle="sea-battle",
+  debug ="debug"
+}
+
 export const APP_ROUTES: Routes = [
   { path: '', pathMatch: 'full', component:StartComponent },
   {
-    path:'debug',
+    path: AppRoutes.debug,
     loadChildren: () => import('./debug/debug.module').then(m => m.DebugModule)
   },
   {
-    path:'sea-battle',
+    path:AppRoutes.seaBattle,
     loadChildren: () => import('./sea-battle/sea-battle.module').then(m => m.SeaBattleModule)
   },
 

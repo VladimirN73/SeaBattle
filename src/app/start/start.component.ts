@@ -8,7 +8,11 @@ import {environment } from '../../environments/environment'
 })
 export class StartComponent implements OnInit {
 
+  title = 'SeaBattle';
   version = environment.version;
+  envname = environment.name;
+  buildAt = environment.buildAt;
+  buildBranch = environment.buildBranch;
 
   constructor() { }
 
