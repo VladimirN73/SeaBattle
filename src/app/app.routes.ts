@@ -4,7 +4,6 @@ import { StartComponent } from './start/start.component';
 
 export const APP_ROUTES: Routes = [
   { path: '', pathMatch: 'full', component:StartComponent },
-  { path: 'app-route', component:AppComponent },
   {
     path:'debug',
     loadChildren: () => import('./debug/debug.module').then(m => m.DebugModule)
@@ -14,7 +13,7 @@ export const APP_ROUTES: Routes = [
     loadChildren: () => import('./sea-battle/sea-battle.module').then(m => m.SeaBattleModule)
   },
 
-  { path: '**', redirectTo: '/app-root' }
+  { path: '**', redirectTo: '/' }
 ];
 
 export const EXTRA_OPTIONS: ExtraOptions = {

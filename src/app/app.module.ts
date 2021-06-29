@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
+import { DatePipe } from '@angular/common';
 
 import { APP_ROUTES, EXTRA_OPTIONS } from './app.routes';
 import { AppComponent } from './app.component';
@@ -21,7 +22,9 @@ import { environment } from '../environments/environment';
       registrationStrategy: 'registerWhenStable:30000'
     })
   ],
-  providers: [],
+  providers: [
+    { provide: DatePipe }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
