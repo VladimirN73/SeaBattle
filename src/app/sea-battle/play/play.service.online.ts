@@ -5,6 +5,7 @@ import { Injectable } from "@angular/core";
 import { Subject, Subscription, timer } from "rxjs";
 import { switchMap, tap, share, retry, takeUntil } from 'rxjs/operators';
 import { SeaItemInfo, SeaBattleGame, SeaBattleService, MapCoordinates } from "../sea-battle.service";
+import { DebugService } from "src/app/debug/debug.service";
 
 @Injectable({providedIn:"root"})
 export class PlayServiceOnline extends PlayServiceBase implements PlayServiceInterface {
@@ -12,7 +13,10 @@ export class PlayServiceOnline extends PlayServiceBase implements PlayServiceInt
   private polling$!: Subscription;
   private stopPolling = new Subject();
 
-  constructor(private firebase: FirebaseService, private seaBattleService: SeaBattleService) { super(); }
+  constructor(private firebase: FirebaseService, private seaBattleService: SeaBattleService, debug:DebugService)
+  { 
+    super("PlayServiceOnline", debug);
+  }
 
   public setGame(game: SeaBattleGame): void
   {
@@ -21,7 +25,7 @@ export class PlayServiceOnline extends PlayServiceBase implements PlayServiceInt
 
   onClick(i: number, j: number)
   {
-    console.log("PlayServiceOnline.onClick("+ i.toString() + ', ' + j.toString()+ ')');
+    this.log("onClick("+ i.toString() + ', ' + j.toString()+ ')');
 
     if (this.game.isStarted)
     {
@@ -41,8 +45,9 @@ export class PlayServiceOnline extends PlayServiceBase implements PlayServiceInt
     this.mySeaMap[i][j].value = nextValue;
   }
 
-  onClickEnemy(i:number, j:number){
-    console.log("PlayServiceOnline.onClickEnemy("+ i.toString() + ', ' + j.toString()+ ')');
+  onClickEnemy(i:number, j:number)
+  {
+    this.log("onClickEnemy("+ i.toString() + ', ' + j.toString()+ ')');
 
     if (!this.game.isStarted)
     {
@@ -74,7 +79,7 @@ export class PlayServiceOnline extends PlayServiceBase implements PlayServiceInt
 
   onEnemyHitted(i:number, j:number, isdead: boolean = false)
   {
-    console.log("PlayServiceOnline.onEnemyHitted("+ i.toString() + ', ' + j.toString()+ ')');
+    this.log("onEnemyHitted("+ i.toString() + ', ' + j.toString()+ ')');
 
     if (!this.game.isStarted) return;
 
@@ -98,7 +103,7 @@ export class PlayServiceOnline extends PlayServiceBase implements PlayServiceInt
 
   onClickOnline(i: number, j: number)
   {
-    console.log('PlayServiceOnline.onClickOnline(' + i.toString + ',' + j.toString() + ')');
+    this.log('onClickOnline(' + i.toString + ',' + j.toString() + ')');
 
     this.game.lastStepOnMyMap = new MapCoordinates(i,j);
 
@@ -149,24 +154,25 @@ export class PlayServiceOnline extends PlayServiceBase implements PlayServiceInt
   getNextStep(){
     setTimeout(() => {
 
-      console.log("getNextStep()")
+      this.log("getNextStep()")
 
     }, 1000);
 
     this.firebase.getNextStep(this.game.gamename).subscribe(
       val=>{ this.handleValue(val); },
-      err=>{ console.log(err); }
+      err=>{ this.log(err); }
     );
   }
 
-  handleValue(val:SeaStep){
-    console.log(val);
+  handleValue(val:SeaStep)
+  {
+    this.log(val);
 
     let step = this.createSeaStep();
 
     // if not connected yet, then ignore/rewrite possible garbage step from last game
     if (!this.game.isConnected) {
-      console.log("create seaStep - WaitingForSecondPlayerConnected");
+      this.log("create seaStep - WaitingForSecondPlayerConnected");
 
       this.game.isConnected = true;
 
@@ -180,18 +186,18 @@ export class PlayServiceOnline extends PlayServiceBase implements PlayServiceInt
     if (val==undefined)
     {
         // cannot be, that the val==undefined and game.isconnected
-        console.log("Error: val==undefined and game.isconnected");
+        this.log("Error: val==undefined and game.isconnected");
     }
 
     if (val.info==SeaItemInfo.WaitingForSecondPlayerConnected){
 
       if (val.player==this.game.myname){
-        console.log("waiting second player connection");
+        this.log("waiting second player connection");
         this.startWaiting();
         return;
       }
 
-      console.log("other player is waiting for my connection");
+      this.log("other player is waiting for my connection");
 
       this.game.enemyName = val.player;
       this.game.isConnected = true;
@@ -251,7 +257,7 @@ export class PlayServiceOnline extends PlayServiceBase implements PlayServiceInt
 
   public whatNext()
   {
-    console.log('PlayServiceOnline.whatNext()');
+    this.log('whatNext()');
     if (!this.game.myMap.validateMap() || !this.game.isStarted){
       this.message="Set ships and press start";
       return;
@@ -274,7 +280,7 @@ export class PlayServiceOnline extends PlayServiceBase implements PlayServiceInt
 
   startWaiting()
   {
-    console.log('PlayServiceOnline.startWaiting()');
+    this.log('startWaiting()');
     this.message = "waithing other player";
 
     if (this.polling$ && !this.polling$.closed){
@@ -286,18 +292,18 @@ export class PlayServiceOnline extends PlayServiceBase implements PlayServiceInt
 
     setTimeout(() => {
 
-      console.log("set waiting as true");
-      console.log("start polling");
+      this.log("set waiting as true");
+      this.log("start polling");
 
       this.polling$ = timer(1, 1000).pipe(
         switchMap(() => this.firebase.getNextStep(this.game.gamename)),
         retry(),
-        tap(console.log),
+        tap(this.log),
         share(),
         takeUntil(this.stopPolling)
       ).subscribe(
         val=>{ this.handleValue(val); },
-        err=>{ console.log(err); }
+        err=>{ this.log(err); }
       );
 
     }, 1000);
@@ -305,7 +311,7 @@ export class PlayServiceOnline extends PlayServiceBase implements PlayServiceInt
   }
 
   stopWaiting(){
-    console.log('PlayServiceOnline.stopWaiting()');
+    this.log('stopWaiting()');
     this.message = "make your step";
     this.game.isWaiting = false;
     this.seaBattleService.saveLastGame(this.game);
@@ -318,7 +324,7 @@ export class PlayServiceOnline extends PlayServiceBase implements PlayServiceInt
 
   onDestroy()
   {
-    console.log('PlayServiceOnline.onDestroy()');
+    this.log('onDestroy()');
     this.stopPolling.next();
     if (this.polling$) {
       this.polling$.unsubscribe();

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 
 import { APP_ROUTES, EXTRA_OPTIONS } from './app.routes';
 import { AppComponent } from './app.component';
@@ -22,7 +23,8 @@ import { StartComponent } from './start/start.component';
       // Register the ServiceWorker as soon as the app is stable
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000'
-    })
+    }),
+    HttpClientModule,
   ],
   providers: [
     { provide: DatePipe }

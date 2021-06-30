@@ -1,3 +1,4 @@
+import { DebugService } from "src/app/debug/debug.service";
 import { MapItem, SeaBattleGame, SeaMap } from "../sea-battle.service";
 
 export class PlayServiceBase {
@@ -8,6 +9,15 @@ export class PlayServiceBase {
   enemySeaMapClass!:SeaMap;
   mySeaMap!:MapItem [][];
   enemySeaMap!: MapItem [][];
+
+  constructor(private cls:string, private debug:DebugService)
+  {
+  }
+
+  log(message:string | any)
+  {
+    this.debug.log(this.cls + ". ", message);
+  }
 
   public setGame(game: SeaBattleGame){
     this.game = game;

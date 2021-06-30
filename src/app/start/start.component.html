@@ -1,19 +1,19 @@
 
-
-  <div style="text-align:center" class="content">
+  <div style="text-align:center">
     <h1>
       {{title}}  <span style="font-size:small;"> v.{{version}} {{envname}} </span>
     </h1>
-    <small>Build at {{buildAt}}, Branch {{buildBranch}}</small>
+    <div><small>Build at {{buildAt}}, Branch {{buildBranch}}</small></div>
+    
     <img width="250" alt="Battleship" src="../assets/img/schiff.svg">
   </div>
 
-<div class="container">
+<div class="game-container">
   <button class="btn btn-primary" routerLink="/sea-battle" >Sea Battle</button>
 </div>
 
 
-<div class="container" style="padding-top: 20px;">
+<div class="game-container" style="padding-top: 20px;">
   <button class="btn btn-success" routerLink="debug" >Debug</button>
 </div>
 

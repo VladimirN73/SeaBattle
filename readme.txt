@@ -13,6 +13,9 @@ Hosting : AWS
    * https://github.com/angular/angular/blob/master/package.json
 
 # History (newest on top)
+29.06.21
+ng update @angular/cli @angular/core  --allowDirty=true --force
+
 28.06.21
 add folders seabattle and debug
 

@@ -15,14 +15,13 @@ export class DebugService{
 
     constructor(
         private datePipe: DatePipe){
-
     }
 
     public setInstallPrompt(deferredInstallPrompt:any){
       this.deferredInstallPrompt = deferredInstallPrompt;
     }
 
-    public log(message: string | any){
+    public log(str: string, message?: string | any){
         this.logs = this.getLogs();
         if (this.logs.length > 200){
             this.logs = this.logs.slice(0,100);
@@ -34,6 +33,8 @@ export class DebugService{
           message = JSON.stringify(message)
         }
 
+        message = str + message;
+
         const time =  this.datePipe.transform(new Date(), 'HH:mm:ss');
 
         // add log on top
@@ -41,7 +42,7 @@ export class DebugService{
 
         localStorage.setItem('logs', this.logs.join(this.lineSeparator));
 
-        console.log("debug-service:" + message);
+        console.log(message);
     }
 
     public getLogs() : string[]{
