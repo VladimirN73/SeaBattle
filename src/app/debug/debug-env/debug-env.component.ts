@@ -4,7 +4,7 @@ import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-debug-env',
   templateUrl: './debug-env.component.html',
-  styleUrls: []
+  styleUrls: ['../debug-styles.scss']
 })
 export class DebugEnvComponent implements OnInit {
 

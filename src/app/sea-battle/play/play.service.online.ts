@@ -254,7 +254,6 @@ export class PlayServiceOnline extends PlayServiceBase implements PlayServiceInt
     this.getNextStep();
   }
 
-
   public whatNext()
   {
     this.log('whatNext()');
