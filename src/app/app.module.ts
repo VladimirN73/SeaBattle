@@ -4,6 +4,12 @@ import { RouterModule } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 
+// 1. Import Fire-Modules
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+//import { AngularFireStorageModule } from '@angular/fire/storage';
+//import { AngularFireAuthModule } from '@angular/fire/auth';
+
 import { APP_ROUTES, EXTRA_OPTIONS } from './app.routes';
 import { AppComponent } from './app.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -25,6 +31,12 @@ import { StartComponent } from './start/start.component';
       registrationStrategy: 'registerWhenStable:30000'
     }),
     HttpClientModule,
+    
+    // 3. Initialize
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule, // firestore
+    //AngularFireAuthModule, // auth
+    //AngularFireStorageModule // storage
   ],
   providers: [
     { provide: DatePipe }

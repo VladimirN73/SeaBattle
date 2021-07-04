@@ -13,6 +13,16 @@ Hosting : AWS
    * https://github.com/angular/angular/blob/master/package.json
 
 # History (newest on top)
+04.07.21
+
+ng g c debug/debugFirestore 
+
+copy config from sea-battle-app (from prev step) int environment 
+create/register sea-battle-app in firebase-console https://console.firebase.google.com/u/0/project/sea-battle-a78c4/settings/general/
+
+npm i @angular/fire
+npm i firebase
+
 29.06.21
 ng update @angular/cli @angular/core  --allowDirty=true --force
 

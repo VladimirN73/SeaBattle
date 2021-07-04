@@ -8,6 +8,7 @@ import { DebugLogsComponent } from './debug-logs/debug-logs.component';
 import { DebugButtonBackComponent } from './debug-button-back/debug-button-back.component';
 import { DebugEnvComponent } from './debug-env/debug-env.component';
 import { DebugTempComponent } from './debug-temp/debug-temp.component';
+import { DebugFirestoreComponent } from './debug-firestore/debug-firestore.component';
 
 @NgModule({
     declarations: [
@@ -15,7 +16,8 @@ import { DebugTempComponent } from './debug-temp/debug-temp.component';
         DebugLogsComponent,
         DebugButtonBackComponent,
         DebugEnvComponent,
-        DebugTempComponent
+        DebugTempComponent,
+        DebugFirestoreComponent
     ],
     imports: [
         DebugRoutingModule,

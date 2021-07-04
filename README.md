@@ -8,7 +8,7 @@ Style: Bootstrap
 
 Server : Serverless
 
-Database: Firestore
+Database: Firestore Database (from Google Firebase)
 
 Repo: github
 
