@@ -27,10 +27,15 @@ export class DebugService{
             this.logs = this.logs.slice(0,100);
         }
 
+        if (message==undefined)
+        {
+            message = "";
+        }
+
         if (typeof message === 'string' || message instanceof String){
-          // nothig to do
+        // nothig to do
         } else {
-          message = JSON.stringify(message)
+        message = JSON.stringify(message)
         }
 
         message = str + message;

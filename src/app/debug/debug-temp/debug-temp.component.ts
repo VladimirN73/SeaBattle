@@ -1,7 +1,6 @@
-import { applySourceSpanToExpressionIfNeeded } from '@angular/compiler/src/output/output_ast';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import { SeaStep, FirebaseService} from '../../shared/firebase.service'
+import { Subscription } from 'rxjs';
+import { SeaStep, FirestoreService, convertToSeaStep} from '../../shared/firestore.service'
 
 @Component({
   selector: 'app-debug-temp',
@@ -15,7 +14,7 @@ export class DebugTempComponent implements OnInit, OnDestroy {
 
   message:string = "";
 
-  constructor(private firebase: FirebaseService) { }
+  constructor(private fire: FirestoreService) { }
 
   ngOnInit(): void {
   }
@@ -29,7 +28,7 @@ export class DebugTempComponent implements OnInit, OnDestroy {
     step.player="host";
 
 
-    this.firebase.setNextStep(name, step);
+    this.fire.setNextStep(name, step);
   }
 
   onLoad(name:string){
@@ -37,9 +36,9 @@ export class DebugTempComponent implements OnInit, OnDestroy {
     this.isLoading=false;
     this.message = "loading ..."
 
-    this.data$ = this.firebase.getNextStep(name).subscribe(
-      val=> this.handleVal(val),
-      err=> this.handleErr(err)
+    this.data$ = this.fire.getNextStep(name).subscribe(
+      val => { let x = convertToSeaStep(val);  this.handleVal(x)},
+      err => this.handleErr(err)
     )
   }
 

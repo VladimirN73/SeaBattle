@@ -1,19 +1,24 @@
 
 import { PlayServiceBase, PlayServiceInterface } from "./play.service.base";
-import { FirebaseService, SeaStep } from "src/app/shared/firebase.service";
+import { convertToSeaStep, SeaStep } from "src/app/shared/firestore.service";
 import { Injectable } from "@angular/core";
-import { Subject, Subscription, timer } from "rxjs";
-import { switchMap, tap, share, retry, takeUntil } from 'rxjs/operators';
+import { Subscription } from "rxjs";
 import { SeaItemInfo, SeaBattleGame, SeaBattleService, MapCoordinates } from "../sea-battle.service";
 import { DebugService } from "src/app/debug/debug.service";
+import { FirestoreService } from "src/app/shared/firestore.service";
+import { convertSnaps } from "src/app/debug/debug-firestore/debug-firestore.component";
+import { Action } from "rxjs/internal/scheduler/Action";
+import { DocumentSnapshot } from "@angular/fire/firestore";
 
 @Injectable({providedIn:"root"})
 export class PlayServiceOnline extends PlayServiceBase implements PlayServiceInterface {
 
-  private polling$!: Subscription;
-  private stopPolling = new Subject();
+  subNextStep: Subscription | undefined;
 
-  constructor(private firebase: FirebaseService, private seaBattleService: SeaBattleService, debug:DebugService)
+  constructor(
+    private fire: FirestoreService, 
+    private seaBattleService: SeaBattleService,
+    debug: DebugService)
   { 
     super("PlayServiceOnline", debug);
   }
@@ -72,7 +77,7 @@ export class PlayServiceOnline extends PlayServiceBase implements PlayServiceInt
     step.row = i;
     step.col = j;
     step.info = SeaItemInfo.Fire;
-    this.firebase.setNextStep(this.game.gamename, step);
+    this.fire.setNextStep(this.game.gamename, step);
 
     this.startWaiting();
   }
@@ -134,7 +139,7 @@ export class PlayServiceOnline extends PlayServiceBase implements PlayServiceInt
       step.info = nextValue; // my ship hitted/dead
       step.row = i;
       step.col = j;
-      this.firebase.setNextStep(this.game.gamename, step);
+      this.fire.setNextStep(this.game.gamename, step);
     }
 
     if (nextValue==SeaItemInfo.EmptyHitted){
@@ -144,7 +149,7 @@ export class PlayServiceOnline extends PlayServiceBase implements PlayServiceInt
       step.player = this.game.myname;
       step.row = 0;
       step.col = 0;
-      this.firebase.setNextStep(this.game.gamename, step);
+      this.fire.setNextStep(this.game.gamename, step);
     }
 
     this.seaBattleService.saveLastGame(this.game);
@@ -152,21 +157,25 @@ export class PlayServiceOnline extends PlayServiceBase implements PlayServiceInt
   }
 
   getNextStep(){
-    setTimeout(() => {
 
-      this.log("getNextStep()")
+    if (this.subNextStep != undefined) return;
 
-    }, 1000);
-
-    this.firebase.getNextStep(this.game.gamename).subscribe(
-      val=>{ this.handleValue(val); },
-      err=>{ this.log(err); }
+    this.subNextStep = this.fire.getNextStep(this.game.gamename).subscribe(
+      val => { let x = this.convert(val); this.handleValue(x); },
+      err => { this.log(err); }
     );
+  }
+
+  convert(doc:any)
+  {
+    let ret = doc as SeaStep;
+
+    return ret;
   }
 
   handleValue(val:SeaStep)
   {
-    this.log(val);
+    this.log("handleValue", val);
 
     let step = this.createSeaStep();
 
@@ -177,8 +186,8 @@ export class PlayServiceOnline extends PlayServiceBase implements PlayServiceInt
       this.game.isConnected = true;
 
       step.info= SeaItemInfo.WaitingForSecondPlayerConnected; //waiting
-      this.firebase.setNextStep(this.game.gamename, step);
-      this.startWaiting();
+      this.fire.setNextStep(this.game.gamename, step);
+      //this.startWaiting();
       return;
     }
 
@@ -193,7 +202,7 @@ export class PlayServiceOnline extends PlayServiceBase implements PlayServiceInt
 
       if (val.player==this.game.myname){
         this.log("waiting second player connection");
-        this.startWaiting();
+        //this.startWaiting();
         return;
       }
 
@@ -213,8 +222,8 @@ export class PlayServiceOnline extends PlayServiceBase implements PlayServiceInt
       {
         step.player = this.game.myname;
       }
-      this.firebase.setNextStep(this.game.gamename, step);
-      this.startWaiting();
+      this.fire.setNextStep(this.game.gamename, step);
+      //this.startWaiting();
       return;
     }
 
@@ -262,12 +271,12 @@ export class PlayServiceOnline extends PlayServiceBase implements PlayServiceInt
       return;
     }
 
-    if (this.game.isWaiting) {
-      this.startWaiting();
-      return;
-    }
+    this.startWaiting();
 
-    this.getNextStep();
+    // inform system that we are waiting
+    let step = this.createSeaStep();
+    this.fire.setNextStep(this.game.gamename,step); // update game to just simulate/initiate the getNextStep
+    
   }
 
   private createSeaStep(): SeaStep
@@ -282,30 +291,18 @@ export class PlayServiceOnline extends PlayServiceBase implements PlayServiceInt
     this.log('startWaiting()');
     this.message = "waithing other player";
 
-    if (this.polling$ && !this.polling$.closed){
-      return;
-    }
-
+    if (this.game.isWaiting==true) return;    
     this.game.isWaiting = true;
     this.seaBattleService.saveLastGame(this.game);
+  
+    // if (this.subNextStep) this.subNextStep.unsubscribe();
 
-    setTimeout(() => {
+    // this.subNextStep = this.fire.getNextStep(this.game.gamename).subscribe(
+    //     val => { let x = convertToSeaStep(val); this.handleValue(x); },
+    //     err => { this.log(err); }     
+    // );
 
-      this.log("set waiting as true");
-      this.log("start polling");
-
-      this.polling$ = timer(1, 1000).pipe(
-        switchMap(() => this.firebase.getNextStep(this.game.gamename)),
-        retry(),
-        tap(this.log),
-        share(),
-        takeUntil(this.stopPolling)
-      ).subscribe(
-        val=>{ this.handleValue(val); },
-        err=>{ this.log(err); }
-      );
-
-    }, 1000);
+    this.getNextStep();
 
   }
 
@@ -314,20 +311,13 @@ export class PlayServiceOnline extends PlayServiceBase implements PlayServiceInt
     this.message = "make your step";
     this.game.isWaiting = false;
     this.seaBattleService.saveLastGame(this.game);
-
-    this.stopPolling.next();
-    if (this.polling$) {
-      this.polling$.unsubscribe();
-    }
+    //if (this.subNextStep) this.subNextStep.unsubscribe();
   }
 
   onDestroy()
   {
     this.log('onDestroy()');
-    this.stopPolling.next();
-    if (this.polling$) {
-      this.polling$.unsubscribe();
-    }
+    if (this.subNextStep) this.subNextStep.unsubscribe();
   }
 
 }

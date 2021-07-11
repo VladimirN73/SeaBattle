@@ -14,9 +14,9 @@ export class PlayServiceBase {
   {
   }
 
-  log(message:string | any)
+  log(str: string | any, message?: string | any)
   {
-    this.debug.log(this.cls + ". ", message);
+    this.debug.log(this.cls + "." + str, message);
   }
 
   public setGame(game: SeaBattleGame){

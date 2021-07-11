@@ -3,6 +3,7 @@
 Repo    : Github https://github.com/VladimirN73/SeaBattle.git
 Style   : SCSS, Booststrap
 Hosting : AWS
+Database: Firestore Database (Google Firebase), https://console.firebase.google.com/u/0/project/sea-battle-a78c4/settings/general/
 
 # Issues
 
@@ -13,11 +14,13 @@ Hosting : AWS
    * https://github.com/angular/angular/blob/master/package.json
 
 # History (newest on top)
-04.07.21
+11.07.21
+firestore works
 
+04.07.21
 ng g c debug/debugFirestore 
 
-copy config from sea-battle-app (from prev step) int environment 
+copy config from sea-battle-app (from firebase-console in prev step) into environment 
 create/register sea-battle-app in firebase-console https://console.firebase.google.com/u/0/project/sea-battle-a78c4/settings/general/
 
 npm i @angular/fire
