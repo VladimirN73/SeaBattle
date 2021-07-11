@@ -1,0 +1,12 @@
+<div class="container">
+  <div class="debug-header">Debug Logs (newest on top)</div>
+</div>
+
+<div class="container">
+  <app-debug-button-back></app-debug-button-back>
+  <button type="button" class="btn btn-primary" (click)="onClear()">Clear Logs</button>
+</div>
+
+<div class="container" style="color: blue;">
+  <span *ngFor="let x of logs; let i = index">{{x}}<br></span>
+</div>

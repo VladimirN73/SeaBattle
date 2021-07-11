@@ -1,1 +1,18 @@
-/* You can add global styles to this file, and also import other style files */
+.game-full-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.game-row {
+  display: flex;
+  flex-direction: row;
+}
+
+
+.game-container {
+  width: 100%;
+  max-width: 700px;
+  margin-right: auto;
+  margin-left: auto;
+}

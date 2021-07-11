@@ -1,0 +1,22 @@
+<div class="container">
+  <div class="debug-header">Debug Firestore</div>
+    <app-debug-button-back></app-debug-button-back>
+  </div>
+
+  <div class="container">
+
+    <div class="game-row">
+      <button type="button" class="btn btn-primary" (click)="onLoad()">Load</button>
+
+      <button type="button" class="btn btn-primary" (click)="onCreate()">Create</button>
+
+      <button type="button" class="btn btn-primary" (click)="onSet()">Set</button>
+
+      <button type="button" class="btn btn-primary" (click)="onLoadExt()">Load Ext</button>
+
+      <button type="button" class="btn btn-primary" (click)="onGetStep()">Get Step</button>
+      <button type="button" class="btn btn-primary" (click)="onSetStep()">Set Step</button>
+    </div>
+  </div>
+
+  <div>{{str}}</div>

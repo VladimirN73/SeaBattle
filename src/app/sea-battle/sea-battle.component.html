@@ -1,0 +1,37 @@
+<div class="container game-full-row" >
+  <div><h2>Sea Battle</h2></div>
+  <div><app-button-back></app-button-back></div>
+</div>
+
+<div class="container" *ngIf="isLastGameAvailable" style="margin-bottom: 10px;">
+  <button class="btn btn-info" [routerLink]="'play'" style="width: 280px;">Continue last game
+    <span *ngIf="lastGame.gamename==''">(offline)</span>
+    <span *ngIf="lastGame.gamename!=''">({{lastGame.gamename}}, {{lastGame.myname}} vs. {{lastGame.enemyName}} )</span>
+  </button>
+</div>
+
+<div class="container" >
+  <button class="btn btn-primary" (click)="onNewOfflineGame(gamenameInput.value, mynameInput.value)" style="width: 280px; margin-bottom: 20px;">New Offline game</button>
+</div>
+
+
+<div class="container" >
+  <div class="form-group">
+    <label for="gamenameId">Online Game Name</label>
+    <input
+        type="text"
+        id="gamenameId"
+        class="form-control" #gamenameInput [value]="gameName">
+  </div>
+  <div class="form-group">
+    <label for="mynameId">My Name</label>
+    <input
+        type="text"
+        id="mynameId"
+        class="form-control" #mynameInput [value]="myname">
+  </div>
+  <button class="btn btn-primary" (click)="onNewOnlineGame(gamenameInput.value, mynameInput.value, 10, 10)" style="margin-right: 5px;">10x10</button>
+  <button class="btn btn-primary" (click)="onNewOnlineGame(gamenameInput.value, mynameInput.value, 12, 12)" style="margin-right: 5px;">12x12</button>
+  <button class="btn btn-primary" (click)="onNewOnlineGame(gamenameInput.value, mynameInput.value, 15, 15)" style="margin-right: 5px;">15x15</button>
+  <p>{{message}}</p>
+</div>

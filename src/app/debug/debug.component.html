@@ -1,0 +1,22 @@
+<div class="container">
+  <div class="debug-header"> Debug  v. {{version}}</div>
+</div>
+
+<div class="container">
+  <button class="btn btn-primary" (click)="onInstall()" [disabled]="isInstalling">
+    Install
+  </button>
+
+  <button class="btn btn-primary" [routerLink]="'logs'">Logs</button>
+  <button class="btn btn-primary" [routerLink]="'env'">Env</button>
+  <button class="btn btn-primary" [routerLink]="'temp'">Temp</button>
+</div>
+
+<div class="container">
+  <h3 >Links</h3>
+  <ul>
+    <li> <a [routerLink]="['/']">Home</a></li>
+    <li> <a [routerLink]="['firestore']">Debug - Firestore</a></li>
+  </ul>
+
+</div>
